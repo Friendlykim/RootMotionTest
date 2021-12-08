@@ -52,9 +52,10 @@ namespace SA
                 }
 
                 vertical = 0;
-                Debug.Log("애니메이션 실행");
+                //Debug.Log("애니메이션 실행");
                 anim.CrossFade(targetAnim, 0.4f);
-                anim.SetBool("canMove", false);
+             //   anim.SetBool("canMove", false);
+             //   EnableRM = true;
                 PlayAnim = false;
             }
             anim.SetFloat("vertical", vertical);
