@@ -36,8 +36,11 @@ namespace SA
             if (Input.GetKeyDown(KeyCode.Alpha1))
                 PlayAnim = true;
 
+            if (Input.GetKeyDown(KeyCode.F))
+                twohanded = (twohanded==true) ? false : true;
+
             EnableRM = !anim.GetBool("canMove");
-            anim.applyRootMotion = EnableRM;
+            //anim.applyRootMotion = EnableRM;
 
             Interacting = anim.GetBool("interacting");
 
@@ -67,6 +70,7 @@ namespace SA
             if(Parry)
             {
                 anim.Play("parry");
+                //anim.CrossFade("parry", 0.4f);
                 Parry = false;
             }
 

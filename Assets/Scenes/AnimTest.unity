@@ -174,7 +174,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LockOn: 0
   followSpeed: 9
-  mouseSpeed: 2
+  mouseSpeed: 4
   controllerSpeed: 7
   Target: {fileID: 0}
   pivot: {fileID: 0}
@@ -1225,7 +1225,7 @@ Rigidbody:
   m_AngularDrag: 0
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 1
+  m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
 --- !u!136 &1642705193
@@ -1274,8 +1274,8 @@ MonoBehaviour:
   horizontal: 0
   MoveAmount: 0
   MoveDir: {x: 0, y: 0, z: 0}
-  moveSpeed: 4
-  runSpeed: 8
+  moveSpeed: 3
+  runSpeed: 6
   rotateSpeed: 10
   toGround: 0.3
   onGround: 0
