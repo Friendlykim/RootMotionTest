@@ -1274,7 +1274,7 @@ MonoBehaviour:
   horizontal: 0
   MoveAmount: 0
   MoveDir: {x: 0, y: 0, z: 0}
-  moveSpeed: 5
+  moveSpeed: 4
   runSpeed: 8
   rotateSpeed: 10
   toGround: 0.3
