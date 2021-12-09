@@ -8,6 +8,15 @@ namespace SA
     {
         float vertical;
         float horizontal;
+        bool b_input; //´Þ¸®±â
+        bool a_input;
+        bool x_input;
+        bool y_input;
+
+        bool rb_input;
+        float rt_input;
+        bool lb_input;
+        float lt_input;
 
         StateManager states;
         CameraManager cam;
@@ -45,6 +54,9 @@ namespace SA
         {
             vertical = Input.GetAxis("Vertical");
             horizontal = Input.GetAxis("Horizontal");
+            b_input = Input.GetButton("b_input");
+            rt_input = Input.GetAxis("RT");
+            Debug.Log(rt_input);
         }
 
         void UpdateState()
@@ -58,6 +70,17 @@ namespace SA
             float m = Mathf.Abs(horizontal) + Mathf.Abs(vertical);
 
             states.MoveAmount = Mathf.Clamp01(m);
+
+            if(b_input)
+            {
+                states.IsRun = (states.MoveAmount > 0);
+              //  if (states.MoveAmount > 0)
+              //      states.IsRun = true;
+            }
+            else
+            {
+                states.IsRun = false;
+            }
 
         }
     }

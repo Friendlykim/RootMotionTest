@@ -61,13 +61,21 @@ namespace SA
                 UseItem = false;
             }
 
-            if(Interacting)
+            if (Interacting)
             {
                 PlayAnim = false;
                 vertical = Mathf.Clamp(vertical, 0, 0.5f);
+                Shield.SetActive(false);
             }
+            else
+                Shield.SetActive(true);
 
-            if(Parry)
+            if(twohanded)
+                Shield.SetActive(false);
+            else
+                Shield.SetActive(true);
+
+            if (Parry)
             {
                 anim.Play("parry");
                 //anim.CrossFade("parry", 0.4f);
@@ -84,15 +92,13 @@ namespace SA
                 {
                     int r = Random.Range(0, th_attacks.Length);
                     targetAnim = th_attacks[r];
-                    Shield.SetActive(false);
                 }
                 else
                 {
                     int r = Random.Range(0, oh_attacks.Length);
                     targetAnim = oh_attacks[r];
-                    Shield.SetActive(true);
 
-                    if (vertical > 0.5f)
+                    if (vertical >= 1f)
                         targetAnim = oh_attacks[0];
                 }
 
@@ -106,6 +112,8 @@ namespace SA
            // anim.SetFloat("vertical", vertical);
 
           //  anim.SetFloat("horizontal", horizontal);
+
+            
         }
     }
 }

@@ -15,13 +15,16 @@ namespace SA
         public float MoveAmount;
         public Vector3 MoveDir;
 
-        [Header("States")]
+        [Header("Stats")]
         public float moveSpeed;
         public float runSpeed;
         public float rotateSpeed;
         public float toGround;
+
+        [Header("States")]
         public bool onGround;
         public bool IsRun;
+        public bool lockOn;
 
         [HideInInspector]
         public Animator anim;
@@ -41,6 +44,8 @@ namespace SA
 
             gameObject.layer = 8;
             ignoreLayers = ~(1 << 9);
+
+            anim.SetBool("onGround", true);
         }
 
         void SetAnimator()
@@ -63,14 +68,20 @@ namespace SA
 
             rigid.drag = (MoveAmount > 0 || onGround == false) ? 0 : 4;
 
+            if (IsRun)
+                lockOn = false;
 
-            Vector3 targetDir = MoveDir;
-            targetDir.y = 0;
-            if (targetDir == Vector3.zero)
-                targetDir = transform.forward;
-            Quaternion tr = Quaternion.LookRotation(targetDir);
-            Quaternion targetRotation = Quaternion.Slerp(transform.rotation, tr, delta * MoveAmount * rotateSpeed);
-            transform.rotation = targetRotation;
+            if(!lockOn)
+            {
+                Vector3 targetDir = MoveDir;
+                targetDir.y = 0;
+                if (targetDir == Vector3.zero)
+                    targetDir = transform.forward;
+                Quaternion tr = Quaternion.LookRotation(targetDir);
+                Quaternion targetRotation = Quaternion.Slerp(transform.rotation, tr, delta * MoveAmount * rotateSpeed);
+                transform.rotation = targetRotation;
+            }
+
 
             float targetspeed = moveSpeed;
             if (IsRun)
@@ -79,7 +90,7 @@ namespace SA
             if (onGround)
                 rigid.velocity = MoveDir * (targetspeed * MoveAmount);
 
-            rigid.velocity = MoveDir * (targetspeed * MoveAmount);
+            //rigid.velocity = MoveDir * (targetspeed * MoveAmount);
             HandleMovementAnimation();
         }
 
@@ -87,10 +98,13 @@ namespace SA
         {
             delta = d;
             onGround = OnGround();
+
+            anim.SetBool("onGround", onGround);
         }
 
         void HandleMovementAnimation()
         {
+            anim.SetBool("run", IsRun);
             anim.SetFloat("vertical", MoveAmount, 0.4f, delta);
             
         }
@@ -99,7 +113,7 @@ namespace SA
         {
             bool r = false;
 
-            Vector3 origin = transform.position + Vector3.up * toGround;
+            Vector3 origin = transform.position + (Vector3.up * toGround);
             Vector3 dir = -Vector3.up;
             float dis = toGround + 0.3f;
             RaycastHit hit;
