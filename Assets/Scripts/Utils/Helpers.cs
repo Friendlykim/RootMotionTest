@@ -33,6 +33,9 @@ namespace SA
         // Update is called once per frame
         void Update()
         {
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+                PlayAnim = true;
+
             EnableRM = !anim.GetBool("canMove");
             anim.applyRootMotion = EnableRM;
 
@@ -86,7 +89,7 @@ namespace SA
                     Shield.SetActive(true);
 
                     if (vertical > 0.5f)
-                        targetAnim = oh_attacks[1];
+                        targetAnim = oh_attacks[0];
                 }
 
                 vertical = 0;
@@ -96,9 +99,9 @@ namespace SA
              //   EnableRM = true;
                 PlayAnim = false;
             }
-            anim.SetFloat("vertical", vertical);
+           // anim.SetFloat("vertical", vertical);
 
-            anim.SetFloat("horizontal", horizontal);
+          //  anim.SetFloat("horizontal", horizontal);
         }
     }
 }

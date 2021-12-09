@@ -18,6 +18,9 @@ namespace SA
         [Header("States")]
         public float moveSpeed;
         public float runSpeed;
+        public float rotateSpeed;
+        public float toGround;
+        public bool onGround;
         public bool IsRun;
 
         [HideInInspector]
@@ -26,12 +29,18 @@ namespace SA
         public Rigidbody rigid;
         [HideInInspector]
         public float delta;
+        [HideInInspector]
+        public LayerMask ignoreLayers;
         public void Init()
         {
             SetAnimator();
             rigid = GetComponent<Rigidbody>();
+            rigid.angularDrag = 999;
+            rigid.drag = 4;
+            rigid.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
 
-
+            gameObject.layer = 8;
+            ignoreLayers = ~(1 << 9);
         }
 
         void SetAnimator()
@@ -52,9 +61,57 @@ namespace SA
         {
             delta = d;
 
-            float targetspeed = moveSpeed;
+            rigid.drag = (MoveAmount > 0 || onGround == false) ? 0 : 4;
 
-            rigid.velocity = MoveDir * moveSpeed;
+
+            Vector3 targetDir = MoveDir;
+            targetDir.y = 0;
+            if (targetDir == Vector3.zero)
+                targetDir = transform.forward;
+            Quaternion tr = Quaternion.LookRotation(targetDir);
+            Quaternion targetRotation = Quaternion.Slerp(transform.rotation, tr, delta * MoveAmount * rotateSpeed);
+            transform.rotation = targetRotation;
+
+            float targetspeed = moveSpeed;
+            if (IsRun)
+                targetspeed = runSpeed;
+
+            if (onGround)
+                rigid.velocity = MoveDir * (targetspeed * MoveAmount);
+
+            rigid.velocity = MoveDir * (targetspeed * MoveAmount);
+            HandleMovementAnimation();
+        }
+
+        public void Tick(float d)
+        {
+            delta = d;
+            onGround = OnGround();
+        }
+
+        void HandleMovementAnimation()
+        {
+            anim.SetFloat("vertical", MoveAmount, 0.4f, delta);
+            
+        }
+
+        public bool OnGround()
+        {
+            bool r = false;
+
+            Vector3 origin = transform.position + Vector3.up * toGround;
+            Vector3 dir = -Vector3.up;
+            float dis = toGround + 0.3f;
+            RaycastHit hit;
+            Debug.DrawRay(origin, dir * dis);
+            if (Physics.Raycast(origin, dir, out hit, dis,ignoreLayers))
+            {
+                r = true;
+                Vector3 targetPosition = hit.point;
+                transform.position = targetPosition;
+            }
+
+            return r;
         }
     }
 }

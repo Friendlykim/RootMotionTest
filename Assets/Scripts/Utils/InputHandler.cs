@@ -12,7 +12,7 @@ namespace SA
         StateManager states;
         CameraManager cam;
 
-        float delata;
+        float delta;
         // Start is called before the first frame update
         void Start()
         {
@@ -21,22 +21,24 @@ namespace SA
             cam = CameraManager.Singleton;
             cam.Init(this.transform);
         }
-
+        
         private void Update()
         {
-            delata = Time.deltaTime;
-            cam.Tick(delata);
-        }
+            delta = Time.deltaTime;
+            states.Tick(delta);
 
+        }
+        
 
 
         private void FixedUpdate()
         {
-            delata = Time.fixedDeltaTime;
+            delta = Time.fixedDeltaTime;
+            //delta = Time.smoothDeltaTime;
             GetInput();
             UpdateState();
-
-            states.FixedTick(delata);
+            cam.Tick(delta);
+            states.FixedTick(delta);
         }
 
         void GetInput()
