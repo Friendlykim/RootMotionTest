@@ -33,7 +33,7 @@ namespace SA
         // Update is called once per frame
         void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Alpha1))
+            if (Input.GetButtonDown("RB"))
                 PlayAnim = true;
 
             if (Input.GetKeyDown(KeyCode.F))

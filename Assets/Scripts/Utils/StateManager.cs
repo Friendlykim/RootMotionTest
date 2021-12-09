@@ -60,6 +60,8 @@ namespace SA
             }
             if (anim == null)
                 anim = activeModel.GetComponent<Animator>();
+
+            
         }
 
         public void FixedTick(float d)
@@ -82,7 +84,6 @@ namespace SA
                 transform.rotation = targetRotation;
             }
 
-
             float targetspeed = moveSpeed;
             if (IsRun)
                 targetspeed = runSpeed;
@@ -100,6 +101,8 @@ namespace SA
             onGround = OnGround();
 
             anim.SetBool("onGround", onGround);
+
+
         }
 
         void HandleMovementAnimation()
