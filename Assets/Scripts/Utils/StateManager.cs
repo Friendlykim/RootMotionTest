@@ -70,8 +70,15 @@ namespace SA
         {
             delta = d;
 
+            inAction = !anim.GetBool("canMove");
+
+
+            if (inAction)
+                return;
             DetectAction();
 
+            if (inAction)
+                return;
             rigid.drag = (MoveAmount > 0 || onGround == false) ? 0 : 4;
 
             if (IsRun)
@@ -101,11 +108,12 @@ namespace SA
 
         public void DetectAction()
         {
-            string targetAnim = null;
+
 
             if (rb == false && rt == false && lb == false && lt == false)
                 return;
-
+            Debug.Log("DetectAction");
+            string targetAnim = null;
             if (rb)
                 targetAnim = "OH_Sword_Attack1";
             if (rt)
@@ -120,6 +128,8 @@ namespace SA
 
             inAction = true;
             anim.CrossFade(targetAnim, 0.4f);
+
+
         }
 
         public void Tick(float d)

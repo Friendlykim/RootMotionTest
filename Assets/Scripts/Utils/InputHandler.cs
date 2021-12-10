@@ -76,6 +76,16 @@ namespace SA
             states.vertical = vertical;
             states.horizontal = horizontal;
 
+            states.b = b_input;
+            states.a = a_input;
+            states.x = x_input;
+            states.y = y_input;
+            states.rb = rb_input;
+            states.rt = rt_input;
+            states.lb = lb_input;
+            states.lt = lt_input;
+
+
             Vector3 v = states.vertical * cam.transform.forward;
             Vector3 h = states.horizontal * cam.transform.right;
             states.MoveDir = (v + h).normalized;
