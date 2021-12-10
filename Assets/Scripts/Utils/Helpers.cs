@@ -61,16 +61,18 @@ namespace SA
                 UseItem = false;
             }
 
-            if (Interacting)
+            if(Interacting==true)
             {
                 PlayAnim = false;
                 vertical = Mathf.Clamp(vertical, 0, 0.5f);
                 Shield.SetActive(false);
             }
             else
+            {
                 Shield.SetActive(true);
+            }
 
-            if(twohanded)
+            if (twohanded)
                 Shield.SetActive(false);
             else
                 Shield.SetActive(true);
