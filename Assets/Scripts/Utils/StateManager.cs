@@ -14,6 +14,7 @@ namespace SA
         public float horizontal;
         public float MoveAmount;
         public Vector3 MoveDir;
+        public bool rt, rb, lt, lb, b, a, x, y;
 
         [Header("Stats")]
         public float moveSpeed;
@@ -25,6 +26,7 @@ namespace SA
         public bool onGround;
         public bool IsRun;
         public bool lockOn;
+        public bool inAction;
 
         [HideInInspector]
         public Animator anim;
@@ -68,6 +70,8 @@ namespace SA
         {
             delta = d;
 
+            DetectAction();
+
             rigid.drag = (MoveAmount > 0 || onGround == false) ? 0 : 4;
 
             if (IsRun)
@@ -93,6 +97,29 @@ namespace SA
 
             //rigid.velocity = MoveDir * (targetspeed * MoveAmount);
             HandleMovementAnimation();
+        }
+
+        public void DetectAction()
+        {
+            string targetAnim = null;
+
+            if (rb == false && rt == false && lb == false && lt == false)
+                return;
+
+            if (rb)
+                targetAnim = "OH_Sword_Attack1";
+            if (rt)
+                targetAnim = "OH_Sword_Attack2";
+            if (lb)
+                targetAnim = "OH_Sword_Attack3";
+            if (lt)
+                targetAnim = "OH_Sword_HeavyAttack1";
+
+            if (string.IsNullOrEmpty(targetAnim) == false)
+                return;
+
+            inAction = true;
+            anim.CrossFade(targetAnim, 0.4f);
         }
 
         public void Tick(float d)

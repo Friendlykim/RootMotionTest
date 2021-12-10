@@ -14,9 +14,11 @@ namespace SA
         bool y_input;
 
         bool rb_input;
-        float rt_input;
         bool lb_input;
-        float lt_input;
+        float rt_axis;
+        bool rt_input;
+        float lt_axis;
+        bool lt_input;
 
         StateManager states;
         CameraManager cam;
@@ -55,8 +57,18 @@ namespace SA
             vertical = Input.GetAxis("Vertical");
             horizontal = Input.GetAxis("Horizontal");
             b_input = Input.GetButton("b_input");
-            rt_input = Input.GetAxis("RT");
-            Debug.Log(rt_input);
+
+            rt_input = Input.GetButton("RT");
+            rt_axis = Input.GetAxis("RT");
+            if (rt_axis != 0)
+                rt_input = true;
+
+            lt_input = Input.GetButton("LT");
+            lt_axis = Input.GetAxis("LT");
+            if (lt_axis != 0)
+                lt_input = true;
+
+            //Debug.Log(rt_input);
         }
 
         void UpdateState()
