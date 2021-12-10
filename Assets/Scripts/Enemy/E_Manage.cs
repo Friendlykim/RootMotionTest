@@ -9,6 +9,7 @@ public class E_Manage : MonoBehaviour
 
     void Start()
     {
+        Eanim = GetComponent<E_Anim>();
         Eanim.Init();
     }
 

@@ -6,19 +6,24 @@ public class E_Movement : MonoBehaviour
 {
     public Transform Target;
 
-    float Vertical;
-    float Horizontal;
+    [Header("Inputs")]
+    public float Vertical;
+    public float Horizontal;
+    public Vector3 MoveDir;
 
+    [Header("Stats")]
     public float MoveSpeed;
     public float RotationSpeed;
 
-    // Start is called before the first frame update
+    [Header("States")]
+    public bool isWalk;
+    public bool isAttack;
+
     void Start()
     {
         
     }
 
-    // Update is called once per frame
     void Update()
     {
         

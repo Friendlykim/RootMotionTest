@@ -14,14 +14,15 @@ namespace SA
         public float horizontal;
         public float MoveAmount;
         public Vector3 MoveDir;
-        public bool rt, rb, lt, lb, b, a, x, y;
+        // 패드 인풋
+        public bool rt, rb, lt, lb, b, a, x, y; 
 
         [Header("Stats")]
         public float moveSpeed;
         public float runSpeed;
         public float rotateSpeed;
         public float toGround;
-
+        public bool CanMove;
         [Header("States")]
         public bool onGround;
         public bool IsRun;
@@ -36,6 +37,8 @@ namespace SA
         public float delta;
         [HideInInspector]
         public LayerMask ignoreLayers;
+
+        float _actionDelay;
         public void Init()
         {
             SetAnimator();
@@ -50,7 +53,7 @@ namespace SA
             anim.SetBool("onGround", true);
         }
 
-        void SetAnimator()
+        void SetAnimator() // 애니메이터 받아오기
         {
             if (activeModel == null)
             {
@@ -66,19 +69,35 @@ namespace SA
             
         }
 
-        public void FixedTick(float d)
+        public void FixedTick(float d) //매프레임마다 적용(물리)
         {
             delta = d;
 
-            inAction = !anim.GetBool("canMove");
+ 
 
-
-            if (inAction)
-                return;
             DetectAction();
 
             if (inAction)
+            {
+                _actionDelay += delta;
+                if(_actionDelay >0.3f)
+                {
+                    inAction = false;
+                    _actionDelay = 0;
+                }
+                else
+                {
+                    return;
+                }
+
+            }
+  
+
+            CanMove = anim.GetBool("canMove");
+
+            if (!CanMove)
                 return;
+
             rigid.drag = (MoveAmount > 0 || onGround == false) ? 0 : 4;
 
             if (IsRun)
@@ -106,9 +125,10 @@ namespace SA
             HandleMovementAnimation();
         }
 
-        public void DetectAction()
+        public void DetectAction() //루트모션 애니메이션
         {
-
+            if (CanMove == false)
+                return;
 
             if (rb == false && rt == false && lb == false && lt == false)
                 return;
@@ -123,12 +143,13 @@ namespace SA
             if (lt)
                 targetAnim = "OH_Sword_HeavyAttack1";
 
-            if (string.IsNullOrEmpty(targetAnim) == false)
+            if (string.IsNullOrEmpty(targetAnim))
                 return;
 
+            CanMove = false;
             inAction = true;
-            anim.CrossFade(targetAnim, 0.4f);
-
+            anim.CrossFade(targetAnim, 0.2f);
+            rigid.velocity = Vector3.zero;
 
         }
 
@@ -140,14 +161,14 @@ namespace SA
             anim.SetBool("onGround", onGround);
 
 
-        }
+        } //매프레임별
 
         void HandleMovementAnimation()
         {
             anim.SetBool("run", IsRun);
             anim.SetFloat("vertical", MoveAmount, 0.4f, delta);
             
-        }
+        }//움직임 애니메이션
 
         public bool OnGround()
         {
@@ -166,7 +187,7 @@ namespace SA
             }
 
             return r;
-        }
+        }//중력,추락
     }
 }
 

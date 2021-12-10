@@ -12,7 +12,7 @@ namespace SA
         bool a_input;
         bool x_input;
         bool y_input;
-
+        //패드 인풋
         bool rb_input;
         bool lb_input;
         float rt_axis;
@@ -52,7 +52,7 @@ namespace SA
             states.FixedTick(delta);
         }
 
-        void GetInput()
+        void GetInput() //키보드&마우스, 패드 인풋
         {
             vertical = Input.GetAxis("Vertical");
             horizontal = Input.GetAxis("Horizontal");
@@ -71,7 +71,7 @@ namespace SA
             //Debug.Log(rt_input);
         }
 
-        void UpdateState()
+        void UpdateState() // 받은 인풋 적용
         {
             states.vertical = vertical;
             states.horizontal = horizontal;
