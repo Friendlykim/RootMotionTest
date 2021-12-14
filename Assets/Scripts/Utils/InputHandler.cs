@@ -20,6 +20,7 @@ namespace SA
         float lt_axis;
         bool lt_input;
 
+
         StateManager states;
         CameraManager cam;
 
@@ -31,12 +32,14 @@ namespace SA
             states.Init();
             cam = CameraManager.Singleton;
             cam.Init(this.transform);
+
         }
         
         private void Update()
         {
             delta = Time.deltaTime;
             states.Tick(delta);
+
 
         }
         
@@ -67,6 +70,9 @@ namespace SA
             lt_axis = Input.GetAxis("LT");
             if (lt_axis != 0)
                 lt_input = true;
+
+            if (Input.GetKeyDown(KeyCode.Escape))
+                Application.Quit();
 
             //Debug.Log(rt_input);
         }

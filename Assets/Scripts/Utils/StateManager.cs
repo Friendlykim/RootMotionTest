@@ -15,7 +15,8 @@ namespace SA
         public float MoveAmount;
         public Vector3 MoveDir;
         // ∆–µÂ ¿Œ«≤
-        public bool rt, rb, lt, lb, b, a, x, y; 
+        public bool rt, rb, lt, lb, b, a, x, y;
+        public string[] OH_Sword_Attack;
 
         [Header("Stats")]
         public float moveSpeed;
@@ -34,6 +35,8 @@ namespace SA
         [HideInInspector]
         public Rigidbody rigid;
         [HideInInspector]
+        public AnimatorHooker a_hook;
+        [HideInInspector]
         public float delta;
         [HideInInspector]
         public LayerMask ignoreLayers;
@@ -47,6 +50,9 @@ namespace SA
             rigid.drag = 4;
             rigid.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
 
+            a_hook = activeModel.AddComponent<AnimatorHooker>();
+            a_hook.Init(this);
+
             gameObject.layer = 8;
             ignoreLayers = ~(1 << 9);
 
@@ -59,9 +65,13 @@ namespace SA
             {
                 anim = GetComponentInChildren<Animator>();
                 if (anim == null)
+                {
                     Debug.Log("No model found");
+                }
                 else
+                {
                     activeModel = anim.gameObject;
+                }
             }
             if (anim == null)
                 anim = activeModel.GetComponent<Animator>();
@@ -79,8 +89,10 @@ namespace SA
 
             if (inAction)
             {
+                anim.applyRootMotion = true;
+
                 _actionDelay += delta;
-                if(_actionDelay >0.3f)
+                if(_actionDelay >0.2f)
                 {
                     inAction = false;
                     _actionDelay = 0;
@@ -98,7 +110,16 @@ namespace SA
             if (!CanMove)
                 return;
 
+            anim.applyRootMotion = false;
+
             rigid.drag = (MoveAmount > 0 || onGround == false) ? 0 : 4;
+
+            float targetspeed = moveSpeed;
+            if (IsRun)
+                targetspeed = runSpeed;
+
+            if (onGround)
+                rigid.velocity = MoveDir * (targetspeed * MoveAmount);
 
             if (IsRun)
                 lockOn = false;
@@ -114,13 +135,6 @@ namespace SA
                 transform.rotation = targetRotation;
             }
 
-            float targetspeed = moveSpeed;
-            if (IsRun)
-                targetspeed = runSpeed;
-
-            if (onGround)
-                rigid.velocity = MoveDir * (targetspeed * MoveAmount);
-
             //rigid.velocity = MoveDir * (targetspeed * MoveAmount);
             HandleMovementAnimation();
         }
@@ -134,10 +148,13 @@ namespace SA
                 return;
             Debug.Log("DetectAction");
             string targetAnim = null;
+
+            int r = Random.Range(0, 3);
+
             if (rb)
                 targetAnim = "OH_Sword_Attack1";
             if (rt)
-                targetAnim = "OH_Sword_Attack2";
+                targetAnim = OH_Sword_Attack[r];
             if (lb)
                 targetAnim = "OH_Sword_Attack3";
             if (lt)
@@ -149,7 +166,7 @@ namespace SA
             CanMove = false;
             inAction = true;
             anim.CrossFade(targetAnim, 0.2f);
-            rigid.velocity = Vector3.zero;
+            //rigid.velocity = Vector3.zero;
 
         }
 

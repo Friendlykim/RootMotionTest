@@ -11,7 +11,8 @@ namespace SA
         [Range(-1, 1)]
         public float horizontal;
 
-        public GameObject Shield;
+        //public GameObject Shield;
+        P_Upgrade shield;
 
         public bool PlayAnim;
         public bool twohanded;
@@ -35,6 +36,12 @@ namespace SA
         {
             if (Input.GetButtonDown("RB"))
                 PlayAnim = true;
+
+            if (Input.GetKeyDown(KeyCode.G))
+                UseItem = true;
+
+            if (Input.GetKeyDown(KeyCode.Tab))
+                Parry = true;
 
             if (Input.GetKeyDown(KeyCode.F))
                 twohanded = (twohanded==true) ? false : true;
@@ -65,22 +72,22 @@ namespace SA
             {
                 PlayAnim = false;
                 vertical = Mathf.Clamp(vertical, 0, 0.5f);
-                Shield.SetActive(false);
+                shield.Rhand[shield.curShield].SetActive(false);
             }
             else
             {
-                Shield.SetActive(true);
+                shield.Rhand[shield.curShield].SetActive(true);
             }
 
             if (twohanded)
-                Shield.SetActive(false);
+                shield.Rhand[shield.curShield].SetActive(false);
             else
-                Shield.SetActive(true);
+                shield.Rhand[shield.curShield].SetActive(true);
 
             if (Parry)
             {
-                anim.Play("parry");
-                //anim.CrossFade("parry", 0.4f);
+                //anim.Play("parry");
+                anim.CrossFade("parry", 0.25f);
                 Parry = false;
             }
 
